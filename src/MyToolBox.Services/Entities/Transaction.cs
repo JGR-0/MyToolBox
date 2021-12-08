@@ -29,9 +29,15 @@ namespace CalculosPlusvalias.Services
             ISIN = fileLine[TransactionColumnsConfig.ISINColNumber];
             OriginalNumber = float.Parse(fileLine[TransactionColumnsConfig.NumberColNumber]);
             RemainingNumber = float.Parse(fileLine[TransactionColumnsConfig.NumberColNumber]);
-            LocalUnitPrice = float.Parse(fileLine[TransactionColumnsConfig.LocalUnitPriceColNumber]);
-            ExchangeRate = float.Parse(fileLine[TransactionColumnsConfig.ExchangeRateColNumber].Replace("€", ""), Thread.CurrentThread.CurrentUICulture);
-            Comission = float.Parse(fileLine[TransactionColumnsConfig.ComissionColNumber].Replace("€", ""), Thread.CurrentThread.CurrentUICulture);
+            LocalUnitPrice = float.Parse(fileLine[TransactionColumnsConfig.LocalUnitPriceColNumber]
+                , NumberStyles.Currency
+                , CultureInfo.GetCultureInfo("es-ES"));
+            ExchangeRate = float.Parse(fileLine[TransactionColumnsConfig.ExchangeRateColNumber]
+                , NumberStyles.Currency
+                , CultureInfo.GetCultureInfo("es-ES"));
+            Comission = float.Parse(fileLine[TransactionColumnsConfig.ComissionColNumber]
+                , NumberStyles.Currency
+                , CultureInfo.GetCultureInfo("es-ES"));
             UnitComission = Comission / OriginalNumber;
 
         }
