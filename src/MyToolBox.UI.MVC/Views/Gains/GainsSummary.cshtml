@@ -1,0 +1,77 @@
+﻿@using CalculosPlusvalias.Infrastructure.Enums;
+
+@model GainsSummaryViewModel
+
+@{
+    ViewData["Title"] = "Resumen plusvalías";
+    var yearsWithSales = Model.Transactions.Where(x => x.Operation == OperationTypesEnum.Sell).Select(x => x.Date.Year).Distinct();
+}
+
+<div id="accordion">
+    @foreach (var year in yearsWithSales)
+    {
+        var yearGains = Model.Products.SelectMany(y => y.Gains).Where(x => x.SaleTransaction.Date.Year == year && x.TotalGain > 0).Sum(x => x.TotalGain);
+        var yearCompensableLooses = Model.Products.SelectMany(y => y.Gains).Where(x => x.SaleTransaction.Date.Year == year && x.TotalGain < 0 && x.Compensable).Sum(x => x.TotalGain);
+
+        <div class="card">
+            <div class="card-header" id="gainsSummary-@year">
+                <h5 class="mb-0">
+                    <button class="btn btn-link  collapsed" data-toggle="collapse" data-target="#gainsSummaryTable-@year" aria-expanded="true" aria-controls="gainsSummary-@year">
+                        Año @year - Plusvalía: @(yearGains + yearCompensableLooses)
+                    </button>
+                </h5>
+            </div>
+            <div id="gainsSummaryTable-@year" class="collapse" aria-labelledby="gainsSummaryTable-@year" data-parent="#accordion">
+                <div class="card-body">
+                    @{
+                        var productsWithGainsThisYear = Model.Products.Where(x => x.Sales.Any(y => y.Date.Year == year));
+                    }
+
+                    @foreach (var product in productsWithGainsThisYear)
+                    {
+
+                        var productGains = product.Gains.Where(x => x.SaleTransaction.Date.Year == year && x.TotalGain > 0).Sum(x => x.TotalGain);
+                        var productCompensableLooses = product.Gains.Where(x => x.SaleTransaction.Date.Year == year && x.TotalGain < 0 && x.Compensable).Sum(x => x.TotalGain);
+                        var productNotCompensableLooses = product.Gains.Where(x => x.SaleTransaction.Date.Year == year && x.TotalGain < 0 && !x.Compensable).Sum(x => x.TotalGain);
+                        <div id="accordion-year-@year-product-@product.ISIN">
+                            <div class="card">
+                                <div class="card-header" id="year-@year-product-@product.ISIN">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#year-@year-product-@product.ISIN-table" aria-expanded="false" aria-controls="year-@year-product-@product.ISIN">
+                                            @product.Name (@product.ISIN). Plusvalía: @(productGains + productCompensableLooses). Pérdidas no compensables: @productNotCompensableLooses
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="year-@year-product-@product.ISIN-table" class="collapse" aria-labelledby="year-@year-product-@product.ISIN-table" data-parent="#accordion-year-@year-product-@product.ISIN">
+                                    <div class="card-body">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Fecha venta</th>
+                                                    <th scope="col">Precio venta</th>
+                                                    <th scope="col">Plusvalía (o minsuvalía)</th>
+                                                    <th scope="col">Compensable</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var gain in product.Gains.Where(x => x.SaleTransaction.Date.Year == year))
+                                                {
+                                                <tr>
+                                                    <th scope="row">@gain.SaleTransaction.Date.ToShortDateString()</th>
+                                                    <th>@gain.SaleTransaction.TotalEURPrice</th>
+                                                    <td>@gain.TotalGain</td>
+                                                    <td>@(gain.Compensable ? "Sí" : "No")</td>
+                                                </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
