@@ -48,6 +48,7 @@
                                             <thead>
                                                 <tr>
                                                     <th scope="col">Fecha venta</th>
+                                                    <th scope="col"># vendido</th>
                                                     <th scope="col">Precio venta</th>
                                                     <th scope="col">Plusvalía (o minsuvalía)</th>
                                                     <th scope="col">Compensable</th>
@@ -58,6 +59,7 @@
                                                 {
                                                 <tr>
                                                     <th scope="row">@gain.SaleTransaction.Date.ToShortDateString()</th>
+                                                    <th>@gain.SaleTransaction.OriginalNumber</th>
                                                     <th>@gain.SaleTransaction.TotalEURPrice</th>
                                                     <td>@gain.TotalGain</td>
                                                     <td>@(gain.Compensable ? "Sí" : "No")</td>
