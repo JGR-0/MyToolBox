@@ -29,8 +29,8 @@ namespace CalculosPlusvalias.Services
             OriginalNumber = float.Parse(fileLine[TransactionColumnsConfig.NumberColNumber]);
             RemainingNumber = float.Parse(fileLine[TransactionColumnsConfig.NumberColNumber]);
             LocalUnitPrice = float.Parse(fileLine[TransactionColumnsConfig.LocalUnitPriceColNumber]);
-            ExchangeRate = float.Parse(fileLine[TransactionColumnsConfig.ExchangeRateColNumber].Replace("€", ""));
-            Comission = float.Parse(fileLine[TransactionColumnsConfig.ComissionColNumber].Replace("€", ""));
+            ExchangeRate = float.Parse(fileLine[TransactionColumnsConfig.ExchangeRateColNumber].Replace("€", "").Trim());
+            Comission = float.Parse(fileLine[TransactionColumnsConfig.ComissionColNumber].Replace("€", "").Trim());
             UnitComission = Comission / OriginalNumber;
 
         }
