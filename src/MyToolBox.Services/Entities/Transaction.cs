@@ -2,7 +2,6 @@
 using CalculosPlusvalias.Infrastructure.Enums;
 using System;
 using System.Globalization;
-using System.Threading;
 
 namespace CalculosPlusvalias.Services
 {
