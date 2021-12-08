@@ -5,6 +5,7 @@ namespace CalculosPlusvalias.Services
     public static class TransactionColumnsConfig
     {
         internal static string Splitter { get; private set; }
+        internal static string DateFormat { get; private set; }
         internal static int DateColNumber { get; private set; }
         internal static int TimeColNumber { get; private set; }
         internal static int ProductNameColNumber { get; private set; }
@@ -16,6 +17,7 @@ namespace CalculosPlusvalias.Services
         
         public static void ConfigureTransactionColumnsConfig(
             string splitter
+            , string dateFormat
             , int? dateColNumber
             , int? timeColNumber
             , int? productNameColNumber
@@ -27,6 +29,7 @@ namespace CalculosPlusvalias.Services
             )
         {
             Splitter = splitter ?? throw new ArgumentNullException(nameof(splitter));
+            DateFormat = dateFormat ?? throw new ArgumentNullException(nameof(dateFormat));
             DateColNumber = dateColNumber ?? throw new ArgumentNullException(nameof(dateColNumber));
             TimeColNumber = timeColNumber ?? throw new ArgumentNullException(nameof(timeColNumber));
             ProductNameColNumber = productNameColNumber ?? throw new ArgumentNullException(nameof(productNameColNumber));

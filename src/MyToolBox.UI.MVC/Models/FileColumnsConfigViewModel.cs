@@ -23,12 +23,12 @@ namespace CalculosPlusvalias.UI.MVC.Models
 
         [Required]
         [Range(0, int.MaxValue)]
-        [DisplayName("Nº columna del nombre del producto")]
+        [DisplayName("Nº columna de nombre del producto")]
         public int ProductNameColNumber { get; set; }
 
         [Required]
         [Range(0, int.MaxValue)]
-        [DisplayName("Nº columna de número de elementos")]
+        [DisplayName("Nº columna de nº de participaciones")]
         public int ItemsNumberColNumber { get; set; }
         
         [Required]
@@ -43,7 +43,7 @@ namespace CalculosPlusvalias.UI.MVC.Models
 
         [Required]
         [Range(0, int.MaxValue)]
-        [DisplayName("Nº columna de tipo de cambio a EURO")]
+        [DisplayName("Nº columna de tipo de cambio a EUR")]
         public int ExchangeRateColNumber { get; set; }
     }
 }

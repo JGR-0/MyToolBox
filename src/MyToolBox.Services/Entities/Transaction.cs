@@ -1,5 +1,7 @@
-﻿using CalculosPlusvalias.Infrastructure.Enums;
+﻿using CalculosPlusvalias.Infrastructure;
+using CalculosPlusvalias.Infrastructure.Enums;
 using System;
+using System.Globalization;
 
 namespace CalculosPlusvalias.Services
 {
@@ -20,8 +22,8 @@ namespace CalculosPlusvalias.Services
 
         private void SetTransaction(string[] fileLine)
         {
-            Date = DateTime.Parse(fileLine[TransactionColumnsConfig.DateColNumber]);
-            Time = DateTime.Parse(fileLine[TransactionColumnsConfig.TimeColNumber]);
+            Date = fileLine[TransactionColumnsConfig.DateColNumber].ToDateTimeFormatted(TransactionColumnsConfig.DateFormat);
+            Time = fileLine[TransactionColumnsConfig.TimeColNumber].ToTime();
             ProductName = fileLine[TransactionColumnsConfig.ProductNameColNumber];
             ISIN = fileLine[TransactionColumnsConfig.ISINColNumber];
             OriginalNumber = float.Parse(fileLine[TransactionColumnsConfig.NumberColNumber]);

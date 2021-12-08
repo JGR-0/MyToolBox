@@ -3,6 +3,7 @@ using CalculosPlusvalias.Services;
 using CalculosPlusvalias.UI.MVC.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ namespace CalculosPlusvalias.UI.MVC.Controllers
     public class GainsController : Controller
     {
         private readonly ILogger<GainsController> _logger;
-        
+
         public GainsController(ILogger<GainsController> logger)
         {
             _logger = logger;
@@ -34,12 +35,13 @@ namespace CalculosPlusvalias.UI.MVC.Controllers
         private static async Task<IEnumerable<Transaction>> GetTransactionsFromFile(GainsRequestViewModel viewModel)
         {
             var rawTransactions = await viewModel.File.ReadLinesAsListAsync().ConfigureAwait(false);
-            if(viewModel.WithHeaders)
+            if (viewModel.WithHeaders)
             {
                 rawTransactions.RemoveAt(0);
             }
             TransactionColumnsConfig.ConfigureTransactionColumnsConfig(
                 viewModel.Splitter
+                , viewModel.DateFormat
                 , viewModel.ColumnsConfiguration.DateColNumber
                 , viewModel.ColumnsConfiguration.TimeColNumber
                 , viewModel.ColumnsConfiguration.ProductNameColNumber
@@ -51,6 +53,6 @@ namespace CalculosPlusvalias.UI.MVC.Controllers
                 );
             return rawTransactions.Select(line => new Transaction(line));
         }
-        
+
     }
 }

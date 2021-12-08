@@ -1,4 +1,5 @@
-﻿@model GainsRequestViewModel
+﻿@using CalculosPlusvalias.Infrastructure.Enums
+@model GainsRequestViewModel
 @{
     ViewData["Title"] = "Plusvalías";
     var splitters = new List<object>()
@@ -6,6 +7,19 @@
         new { Id="\t", Text="Tab" },
         new { Id=",", Text="," },
         new { Id="|", Text="|" }
+    };
+
+    var dateFormats = new List<object>()
+    {
+        new { Id="dd/mm/yyyy", Text="dd/mm/yyyy"},
+        new { Id="mm/dd/yyyy", Text="mm/dd/yyyy"},
+        new { Id="yyyy/mm/dd", Text="yyyy/mm/dd"},
+        new { Id="dd-mm-yyyy", Text="dd-mm-yyyy"},
+        new { Id="mm-dd-yyyy", Text="mm-dd-yyyy"},
+        new { Id="yyyy-mm-dd", Text="yyyy-mm-dd"},
+        new { Id="dd.mm.yyyy", Text="dd.mm.yyyy"},
+        new { Id="mm.dd.yyyy", Text="mm.dd.yyyy"},
+        new { Id="yyyy.mm.dd", Text="yyyy.mm.dd"},
     };
 }
 <div class="d-flex flex-column">
@@ -19,98 +33,86 @@
     </div>
 
     <div class="col-sm-12 pt-5">
-        <form enctype="multipart/form-data" method="post" asp-controller="Gains" asp-action="GainsRequest" class="row align-items-center justify-content-start d-flex">
+        <form enctype="multipart/form-data" method="post" asp-controller="Gains" asp-action="GainsRequest" class="row align-items-center justify-content-between d-flex">
 
             @Html.AntiForgeryToken()
 
-            <div class="col-sm-12 p-2">
-                <div class="d-flex row">
-                    <div class="col-sm-12 col-md-6">
-                        <div class="d-flex row">
-                            <input class="col-sm-12" asp-for="File" type="file">
-                            <span asp-validation-for="File"></span>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-12 col-md-3">
-                        <div class="d-flex flex-column">
-                            <label class="col-sm-12 text-center" asp-for="WithHeaders"></label>
-                            <input class="col-sm-12" asp-for="WithHeaders" type="checkbox">
-                            <span asp-validation-for="WithHeaders"></span>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-12 col-md-3">
-                        <div class="d-flex flex-column">
-                            <label class="col-sm-12 text-center" asp-for="Splitter" asp-items="splitters.Select(x => new SelectList"></label>
-                            @Html.DropDownListFor(m => m.Splitter, new SelectList(splitters, "Id", "Text"))
-                            <span asp-validation-for="Splitter"></span>
-                        </div>
-                    </div>
-                </div>
+            <div class="col-sm-12 col-md-6 pb-3 d-flex row">
+                <input asp-for="File" type="file">
+                <span asp-validation-for="File"></span>
             </div>
 
-            <div class="col-sm-12 col-md-6 d-flex p-2">
-                <label class="col-sm-12 col-md-10" asp-for="ColumnsConfiguration.DateColNumber"></label>
-                <input class="col-sm-12 col-md-2" asp-for="ColumnsConfiguration.DateColNumber" type="number" min="0">
-                <span class="text-danger">*</span>
+            <div class="col-sm-12 col-md-6 pb-3 d-flex row">
+                <label class="col-sm-12 col-md-10" asp-for="WithHeaders"></label>
+                <input class="col-sm-12 col-md-2 " asp-for="WithHeaders" type="checkbox">
+                <span asp-validation-for="WithHeaders"></span>
+            </div>
+
+            <div class="col-sm-12 col-md-6 d-flex row p-2">
+                <label class="col-sm-12 col-md-8" asp-for="Splitter" asp-items="splitters.Select(x => new SelectList"></label>
+                @Html.DropDownListFor(m => m.Splitter, new SelectList(splitters, "Id", "Text"), null, new { @class = "col-sm-12 col-md-4" })
+                <span asp-validation-for="Splitter"></span>
+            </div>
+
+            <div class="col-sm-12 col-md-6 d-flex row p-2">
+                <label class="col-sm-12 col-md-8" asp-for="DateFormat" asp-items="dateFormats.Select(x => new SelectList"></label>
+                @Html.DropDownListFor(m => m.DateFormat, new SelectList(dateFormats, "Id", "Text"), null, new { @class = "col-sm-12 col-md-4" })
+                <span asp-validation-for="DateFormat"></span>
+            </div>
+
+            <div class="col-sm-12 col-md-6 d-flex row p-2">
+                <label class="col-sm-12 col-md-8 gains-form-note" asp-for="ColumnsConfiguration.DateColNumber"></label>
+                <input class="col-sm-12 col-md-4" asp-for="ColumnsConfiguration.DateColNumber" type="number" min="0">
                 <span asp-validation-for="ColumnsConfiguration.DateColNumber"></span>
             </div>
 
-            <div class="col-sm-12 col-md-6 d-flex p-2">
-                <label class="col-sm-12  col-md-10" asp-for="ColumnsConfiguration.TimeColNumber"></label>
-                <input class="col-sm-12  col-md-2" asp-for="ColumnsConfiguration.TimeColNumber" type="number" min="0">
-                <span class="text-danger">*</span>
+            <div class="col-sm-12 col-md-6 d-flex row p-2">
+                <label class="col-sm-12  col-md-8 gains-form-note" asp-for="ColumnsConfiguration.TimeColNumber"></label>
+                <input class="col-sm-12  col-md-4" asp-for="ColumnsConfiguration.TimeColNumber" type="number" min="0">
                 <span asp-validation-for="ColumnsConfiguration.TimeColNumber"></span>
             </div>
 
-            <div class="col-sm-12 col-md-6 d-flex p-2">
-                <label class="col-sm-12  col-md-10" asp-for="ColumnsConfiguration.ISINColNumber"></label>
-                <input class="col-sm-12  col-md-2" asp-for="ColumnsConfiguration.ISINColNumber" type="number" min="0">
-                <span class="text-danger">*</span>
+            <div class="col-sm-12 col-md-6 d-flex row p-2">
+                <label class="col-sm-12  col-md-8 gains-form-note" asp-for="ColumnsConfiguration.ISINColNumber"></label>
+                <input class="col-sm-12  col-md-4" asp-for="ColumnsConfiguration.ISINColNumber" type="number" min="0">
                 <span asp-validation-for="ColumnsConfiguration.ISINColNumber"></span>
             </div>
 
-            <div class="col-sm-12 col-md-6 d-flex p-2">
-                <label class="col-sm-12  col-md-10" asp-for="ColumnsConfiguration.ProductNameColNumber"></label>
-                <input class="col-sm-12  col-md-2" asp-for="ColumnsConfiguration.ProductNameColNumber" type="number" min="0">
-                <span class="text-danger">*</span>
+            <div class="col-sm-12 col-md-6 d-flex row p-2">
+                <label class="col-sm-12  col-md-8 gains-form-note" asp-for="ColumnsConfiguration.ProductNameColNumber"></label>
+                <input class="col-sm-12  col-md-4" asp-for="ColumnsConfiguration.ProductNameColNumber" type="number" min="0">
                 <span asp-validation-for="ColumnsConfiguration.ProductNameColNumber"></span>
             </div>
 
-            <div class="col-sm-12 col-md-6 d-flex p-2">
-                <label class="col-sm-12  col-md-10" asp-for="ColumnsConfiguration.ItemsNumberColNumber"></label>
-                <input class="col-sm-12  col-md-2" asp-for="ColumnsConfiguration.ItemsNumberColNumber" type="number" min="0">
-                <span class="text-danger">*</span>
+            <div class="col-sm-12 col-md-6 d-flex row p-2">
+                <label class="col-sm-12  col-md-8 gains-form-note" asp-for="ColumnsConfiguration.ItemsNumberColNumber"></label>
+                <input class="col-sm-12  col-md-4" asp-for="ColumnsConfiguration.ItemsNumberColNumber" type="number" min="0">
                 <span asp-validation-for="ColumnsConfiguration.ItemsNumberColNumber"></span>
             </div>
 
-            <div class="col-sm-12 col-md-6 d-flex p-2">
-                <label class="col-sm-12  col-md-10" asp-for="ColumnsConfiguration.LocalUnitPriceColNumber"></label>
-                <input class="col-sm-12  col-md-2" asp-for="ColumnsConfiguration.LocalUnitPriceColNumber" type="number" min="0">
-                <span class="text-danger">*</span>
+            <div class="col-sm-12 col-md-6 d-flex row p-2">
+                <label class="col-sm-12  col-md-8 gains-form-note" asp-for="ColumnsConfiguration.LocalUnitPriceColNumber"></label>
+                <input class="col-sm-12  col-md-4" asp-for="ColumnsConfiguration.LocalUnitPriceColNumber" type="number" min="0">
                 <span asp-validation-for="ColumnsConfiguration.LocalUnitPriceColNumber"></span>
             </div>
 
-            <div class="col-sm-12 col-md-6 d-flex p-2">
-                <label class="col-sm-12  col-md-10" asp-for="ColumnsConfiguration.ComissionColNumber"></label>
-                <input class="col-sm-12  col-md-2" asp-for="ColumnsConfiguration.ComissionColNumber" type="number" min="0">
-                <span class="text-danger">*</span>
+            <div class="col-sm-12 col-md-6 d-flex row p-2">
+                <label class="col-sm-12  col-md-8 gains-form-note" asp-for="ColumnsConfiguration.ComissionColNumber"></label>
+                <input class="col-sm-12  col-md-4" asp-for="ColumnsConfiguration.ComissionColNumber" type="number" min="0">
                 <span asp-validation-for="ColumnsConfiguration.ComissionColNumber"></span>
             </div>
 
-            <div class="col-sm-12 col-md-6 d-flex p-2">
-                <label class="col-sm-12  col-md-10" asp-for="ColumnsConfiguration.ExchangeRateColNumber"></label>
-                <input class="col-sm-12  col-md-2" asp-for="ColumnsConfiguration.ExchangeRateColNumber" type="number" min="0">
-                <span class="text-danger">*</span>
+            <div class="col-sm-12 col-md-6 d-flex row p-2">
+                <label class="col-sm-12  col-md-8 gains-form-note" asp-for="ColumnsConfiguration.ExchangeRateColNumber"></label>
+                <input class="col-sm-12  col-md-4" asp-for="ColumnsConfiguration.ExchangeRateColNumber" type="number" min="0">
                 <span asp-validation-for="ColumnsConfiguration.ExchangeRateColNumber"></span>
             </div>
 
-            <div class="col-sm-12 d-flex justify-content-center pt-3 text-danger">
+            <div class="col-sm-12 row d-flex justify-content-center p-2 pt-3 text-danger">
                 <small>* La primera columna del fichero es 0.</small>
             </div>
 
-            <div class="col-sm-12 d-flex justify-content-center pt-5">
+            <div class="col-sm-12 row d-flex justify-content-center p-2 pt-5">
                 <input class="btn btn-primary col-sm-12" type="submit" value="Calcular" />
             </div>
 

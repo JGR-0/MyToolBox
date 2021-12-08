@@ -21,6 +21,18 @@ namespace CalculosPlusvalias.UI.MVC.Models
         private string _splitter { get; set; }
 
         [Required]
+        [DisplayName("Separador fecha")]
+        public string DateSplitter { get => _dateSplitter; set => _dateSplitter = value ?? "/"; }
+
+        private string _dateSplitter { get; set; }
+
+        [Required]
+        [DisplayName("Formato fecha")]
+        public string DateFormat { get => _dateFormat; set => _dateFormat = value ?? "dd/mm/yyyy"; }
+
+        private string _dateFormat { get; set; }
+
+        [Required]
         public FileColumnsConfigViewModel ColumnsConfiguration { get; set; }
     }
 }
