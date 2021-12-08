@@ -27,6 +27,11 @@ namespace CalculosPlusvalias.UI.MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> GainsRequest(GainsRequestViewModel viewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return View("Index");
+            }
+
             var transactions = await GetTransactionsFromFile(viewModel).ConfigureAwait(false);
             var responseViewModel = new GainsSummaryViewModel(transactions);
             return View("GainsSummary", responseViewModel);

@@ -2,13 +2,6 @@
 @model GainsRequestViewModel
 @{
     ViewData["Title"] = "Plusvalías";
-    var splitters = new List<object>()
-    {
-        new { Id="\t", Text="Tab" },
-        new { Id=";", Text=";" },
-        new { Id="|", Text="|" }
-    };
-
     var dateFormats = new List<object>()
     {
         new { Id="dd/mm/yyyy", Text="dd/mm/yyyy"},
@@ -25,9 +18,11 @@
 <div class="d-flex flex-column">
 
     <div class="col-sm-12">
-        <h1 class="text-center">¡Bienvenido inversor!</h1>
-        <p class="text-center">Selecciona tu fichero con todos los registros de operaciones de Compra y Venta de productos financieros. </p>
+        <h1 class="text-center pb-3">¡Bienvenido inversor!</h1>
+        <p class="text-center">Selecciona tu fichero <strong>CSV</strong> separado por <strong>;</strong> con todos los registros de <strong>operaciones de Compra y Venta</strong> de productos financieros. </p>
         <p class="text-center">Todas las operaciones se realizan en memoria en tiempo de ejecución por lo que no almacenamos ningún dato.</p>
+        <p class="text-center">Los valores <strong>decimales</strong> del fichero han de ser indicados por <strong>comas</strong>.</p>
+        <p class="text-center"><strong>No incluya símbolos de moneda</strong> en los datos numéricos del fichero.</p>
         <p class="text-center font-weight-bold font-italic text-danger">Recuerda que este cálculo no es más que una ayuda y queda bajo la responsabilidad de cada uno los datos presentados a las instituciones oficiales.</p>
         <p class="text-center font-italic">Si descubres que hay algún gazapo o quieres contactar conmigo puedes <a href="https://github.com/JGR-0/MyToolbox/issues" target="_blank">abrir un ticket en GitHub</a>.</p>
     </div>
@@ -37,79 +32,73 @@
 
             @Html.AntiForgeryToken()
 
-            <div class="col-sm-12 col-md-6 pb-3 d-flex row">
-                <input asp-for="File" type="file">
-                <span asp-validation-for="File"></span>
-            </div>
-
-            <div class="col-sm-12 col-md-6 pb-3 d-flex row">
-                <label class="col-sm-12 col-md-10" asp-for="WithHeaders"></label>
-                <input class="col-sm-12 col-md-2 " asp-for="WithHeaders" type="checkbox">
-                <span asp-validation-for="WithHeaders"></span>
+            <div class="col-sm-12 pb-3 d-flex row justify-content-center">
+                <input asp-for="File" type="file" required accept=".csv">
+                <span class="text-danger" asp-validation-for="File"></span>
             </div>
 
             <div class="col-sm-12 col-md-6 d-flex row p-2">
-                <label class="col-sm-12 col-md-8" asp-for="Splitter" asp-items="splitters.Select(x => new SelectList"></label>
-                @Html.DropDownListFor(m => m.Splitter, new SelectList(splitters, "Id", "Text"), null, new { @class = "col-sm-12 col-md-4" })
-                <span asp-validation-for="Splitter"></span>
+                <label class="col-sm-8 text-center" asp-for="WithHeaders"></label>
+                <input class="col-sm-4 " asp-for="WithHeaders" type="checkbox">
+                <span class="text-danger" asp-validation-for="WithHeaders"></span>
             </div>
 
             <div class="col-sm-12 col-md-6 d-flex row p-2">
                 <label class="col-sm-12 col-md-8" asp-for="DateFormat" asp-items="dateFormats.Select(x => new SelectList"></label>
-                @Html.DropDownListFor(m => m.DateFormat, new SelectList(dateFormats, "Id", "Text"), null, new { @class = "col-sm-12 col-md-4" })
-                <span asp-validation-for="DateFormat"></span>
+                @Html.DropDownListFor(m => m.DateFormat, new SelectList(dateFormats, "Id", "Text"), null, new { @class = "col-sm-12 col-md-4"})
+                <span class="text-danger" asp-validation-for="DateFormat"></span>
             </div>
 
             <div class="col-sm-12 col-md-6 d-flex row p-2">
                 <label class="col-sm-12 col-md-8 gains-form-note" asp-for="ColumnsConfiguration.DateColNumber"></label>
-                <input class="col-sm-12 col-md-4" asp-for="ColumnsConfiguration.DateColNumber" type="number" min="0">
-                <span asp-validation-for="ColumnsConfiguration.DateColNumber"></span>
+                <input class="col-sm-12 col-md-4" asp-for="ColumnsConfiguration.DateColNumber" type="number" min="0" required>
+                <span class="text-danger" asp-validation-for="ColumnsConfiguration.DateColNumber"></span>
             </div>
 
             <div class="col-sm-12 col-md-6 d-flex row p-2">
                 <label class="col-sm-12  col-md-8 gains-form-note" asp-for="ColumnsConfiguration.TimeColNumber"></label>
-                <input class="col-sm-12  col-md-4" asp-for="ColumnsConfiguration.TimeColNumber" type="number" min="0">
-                <span asp-validation-for="ColumnsConfiguration.TimeColNumber"></span>
+                <input class="col-sm-12  col-md-4" asp-for="ColumnsConfiguration.TimeColNumber" type="number" min="0" required>
+                <span class="text-danger" asp-validation-for="ColumnsConfiguration.TimeColNumber"></span>
             </div>
 
             <div class="col-sm-12 col-md-6 d-flex row p-2">
                 <label class="col-sm-12  col-md-8 gains-form-note" asp-for="ColumnsConfiguration.ISINColNumber"></label>
-                <input class="col-sm-12  col-md-4" asp-for="ColumnsConfiguration.ISINColNumber" type="number" min="0">
-                <span asp-validation-for="ColumnsConfiguration.ISINColNumber"></span>
+                <input class="col-sm-12  col-md-4" asp-for="ColumnsConfiguration.ISINColNumber" type="number" min="0" required>
+                <span class="text-danger" asp-validation-for="ColumnsConfiguration.ISINColNumber"></span>
             </div>
 
             <div class="col-sm-12 col-md-6 d-flex row p-2">
                 <label class="col-sm-12  col-md-8 gains-form-note" asp-for="ColumnsConfiguration.ProductNameColNumber"></label>
-                <input class="col-sm-12  col-md-4" asp-for="ColumnsConfiguration.ProductNameColNumber" type="number" min="0">
-                <span asp-validation-for="ColumnsConfiguration.ProductNameColNumber"></span>
+                <input class="col-sm-12  col-md-4" asp-for="ColumnsConfiguration.ProductNameColNumber" type="number" min="0" required>
+                <span class="text-danger" asp-validation-for="ColumnsConfiguration.ProductNameColNumber"></span>
             </div>
 
             <div class="col-sm-12 col-md-6 d-flex row p-2">
                 <label class="col-sm-12  col-md-8 gains-form-note" asp-for="ColumnsConfiguration.ItemsNumberColNumber"></label>
-                <input class="col-sm-12  col-md-4" asp-for="ColumnsConfiguration.ItemsNumberColNumber" type="number" min="0">
-                <span asp-validation-for="ColumnsConfiguration.ItemsNumberColNumber"></span>
+                <input class="col-sm-12  col-md-4" asp-for="ColumnsConfiguration.ItemsNumberColNumber" type="number" min="0" required>
+                <span class="text-danger" asp-validation-for="ColumnsConfiguration.ItemsNumberColNumber"></span>
             </div>
 
             <div class="col-sm-12 col-md-6 d-flex row p-2">
                 <label class="col-sm-12  col-md-8 gains-form-note" asp-for="ColumnsConfiguration.LocalUnitPriceColNumber"></label>
-                <input class="col-sm-12  col-md-4" asp-for="ColumnsConfiguration.LocalUnitPriceColNumber" type="number" min="0">
-                <span asp-validation-for="ColumnsConfiguration.LocalUnitPriceColNumber"></span>
+                <input class="col-sm-12  col-md-4" asp-for="ColumnsConfiguration.LocalUnitPriceColNumber" type="number" min="0" required>
+                <span class="text-danger" asp-validation-for="ColumnsConfiguration.LocalUnitPriceColNumber"></span>
             </div>
 
             <div class="col-sm-12 col-md-6 d-flex row p-2">
                 <label class="col-sm-12  col-md-8 gains-form-note" asp-for="ColumnsConfiguration.ComissionColNumber"></label>
-                <input class="col-sm-12  col-md-4" asp-for="ColumnsConfiguration.ComissionColNumber" type="number" min="0">
-                <span asp-validation-for="ColumnsConfiguration.ComissionColNumber"></span>
+                <input class="col-sm-12  col-md-4" asp-for="ColumnsConfiguration.ComissionColNumber" type="number" min="0" required>
+                <span class="text-danger" asp-validation-for="ColumnsConfiguration.ComissionColNumber"></span>
             </div>
 
             <div class="col-sm-12 col-md-6 d-flex row p-2">
                 <label class="col-sm-12  col-md-8 gains-form-note" asp-for="ColumnsConfiguration.ExchangeRateColNumber"></label>
-                <input class="col-sm-12  col-md-4" asp-for="ColumnsConfiguration.ExchangeRateColNumber" type="number" min="0">
-                <span asp-validation-for="ColumnsConfiguration.ExchangeRateColNumber"></span>
+                <input class="col-sm-12  col-md-4" asp-for="ColumnsConfiguration.ExchangeRateColNumber" type="number" min="0" required>
+                <span class="text-danger" asp-validation-for="ColumnsConfiguration.ExchangeRateColNumber"></span>
             </div>
 
-            <div class="col-sm-12 row d-flex justify-content-center p-2 pt-3 text-danger">
-                <small>* La primera columna del fichero es 0.</small>
+            <div class="col-sm-12 row d-flex justify-content-center p-2 pt-3 text-danger text-sm-center">
+                <small>* La primera columna del fichero es 0.</small>                
             </div>
 
             <div class="col-sm-12 row d-flex justify-content-center p-2 pt-5">
