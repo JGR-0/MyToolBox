@@ -11,6 +11,6 @@ namespace CalculosPlusvalias.UI.MVC.Attributes
         }
 
         public override bool IsValid(object value) => 
-            (value as IFormFile).ContentType == "application/vnd.ms-excel";
+            string.Equals((value as IFormFile).Name.Split(',')[1], "csv", System.StringComparison.InvariantCultureIgnoreCase);
     }
 }
