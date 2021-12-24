@@ -11,6 +11,6 @@ namespace CalculosPlusvalias.UI.MVC.Attributes
         }
 
         public override bool IsValid(object value) => 
-            string.Equals((value as IFormFile).Name.Split(',')[1], "csv", System.StringComparison.InvariantCultureIgnoreCase);
+            string.Equals((value as IFormFile).FileName.Split('.')[1], "csv", System.StringComparison.InvariantCultureIgnoreCase);
     }
 }
